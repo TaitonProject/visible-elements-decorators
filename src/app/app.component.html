@@ -1,0 +1,26 @@
+<div class="main-container">
+    <button (click)="redrawTooltip()">redraw</button>
+    <div
+        class="container"
+        (resized)="onResize($event)"
+    >
+        <div
+            class="grid"
+            #gridElement
+            (scroll)="gridScroll()"
+        >
+            <div
+                #rowElement
+                *ngFor="let row of rows; let i = index"
+                class="row"
+                (click)="createTooltip(i, rowElement)"
+            >
+                {{row}}
+            </div>
+        </div>
+    </div>
+    <div
+        #resizeElement
+        class="resize-container"
+    ></div>
+</div>
