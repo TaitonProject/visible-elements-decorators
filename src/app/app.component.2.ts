@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { setVisibleAfterCall, executeIfExist, Unsubscribe } from './utils/decorators/tooltip.decorator';
+import { setVisibleAfterCall, executeIfExist } from './utils/decorators/tooltip.decorator';
 import { HTMLDivElementPerfomance } from './core/html-div-element-perfomance.interface';
 
 @Component({
@@ -10,13 +10,12 @@ import { HTMLDivElementPerfomance } from './core/html-div-element-perfomance.int
 export class AppComponent implements OnInit {
 
     @ViewChild('gridElement') gridElement: ElementRef<HTMLDivElementPerfomance>;
-    user: { name: string, log: string };
+
     rows: Array<string> = new Array<string>();
     tooltipElement: HTMLDivElementPerfomance;
     activeRowElement: HTMLDivElementPerfomance;
     paddingOfTooltip = -20;
     elemsWithBoundingRects = [];
-    destroyComponent = false;
 
     constructor(private renderer: Renderer2) {
 
@@ -33,15 +32,18 @@ export class AppComponent implements OnInit {
     }
 
     gridScroll() {
+        console.log('grdi scroll');
         this.redrawTooltip();
     }
 
     onResize() {
+        console.log('on resize');
         this.redrawTooltip();
     }
 
     @setVisibleAfterCall
     createTooltip(index: number, rowElement: HTMLDivElement) {
+        console.log('create');
         this.removeTooltip();
         const rowElementPerfomance: HTMLDivElementPerfomance = new HTMLDivElementPerfomance(rowElement);
         const rowElementRect: ClientRect = rowElementPerfomance.getBoundingClientRect();
@@ -72,6 +74,7 @@ export class AppComponent implements OnInit {
     @executeIfExist('tooltipElement')
     @setVisibleAfterCall
     redrawTooltip() {
+        console.log('redraw');
         this.tooltipElement.element.style.top = (this.activeRowElement.getBoundingClientRect().top) + this.paddingOfTooltip + 'px';
     }
 

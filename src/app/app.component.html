@@ -1,5 +1,6 @@
 <div class="main-container">
-    <button (click)="redrawTooltip()">redraw</button>
+    <button (click)="destroyComponent = !destroyComponent">ngIf</button>
+    <app-my-component *ngIf="destroyComponent"></app-my-component>
     <div
         class="container"
         (resized)="onResize($event)"
@@ -10,8 +11,8 @@
             (scroll)="gridScroll()"
         >
             <div
-                #rowElement
                 *ngFor="let row of rows; let i = index"
+                #rowElement
                 class="row"
                 (click)="createTooltip(i, rowElement)"
             >
@@ -19,8 +20,4 @@
             </div>
         </div>
     </div>
-    <div
-        #resizeElement
-        class="resize-container"
-    ></div>
 </div>

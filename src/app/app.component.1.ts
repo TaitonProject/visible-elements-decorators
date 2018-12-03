@@ -1,5 +1,4 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { setVisibleAfterCall, executeIfExist, Unsubscribe } from './utils/decorators/tooltip.decorator';
 import { HTMLDivElementPerfomance } from './core/html-div-element-perfomance.interface';
 
 @Component({
@@ -10,13 +9,12 @@ import { HTMLDivElementPerfomance } from './core/html-div-element-perfomance.int
 export class AppComponent implements OnInit {
 
     @ViewChild('gridElement') gridElement: ElementRef<HTMLDivElementPerfomance>;
-    user: { name: string, log: string };
+
     rows: Array<string> = new Array<string>();
     tooltipElement: HTMLDivElementPerfomance;
     activeRowElement: HTMLDivElementPerfomance;
     paddingOfTooltip = -20;
     elemsWithBoundingRects = [];
-    destroyComponent = false;
 
     constructor(private renderer: Renderer2) {
 
@@ -40,7 +38,6 @@ export class AppComponent implements OnInit {
         this.redrawTooltip();
     }
 
-    @setVisibleAfterCall
     createTooltip(index: number, rowElement: HTMLDivElement) {
         this.removeTooltip();
         const rowElementPerfomance: HTMLDivElementPerfomance = new HTMLDivElementPerfomance(rowElement);
@@ -57,6 +54,7 @@ export class AppComponent implements OnInit {
         document.body.appendChild(divElementPerfomance.element);
         this.tooltipElement = divElementPerfomance;
         this.activeRowElement = rowElementPerfomance;
+        this.setVisible();
     }
 
     setVisible() {
@@ -69,15 +67,17 @@ export class AppComponent implements OnInit {
         }
     }
 
-    @executeIfExist('tooltipElement')
-    @setVisibleAfterCall
     redrawTooltip() {
-        this.tooltipElement.element.style.top = (this.activeRowElement.getBoundingClientRect().top) + this.paddingOfTooltip + 'px';
+        if (this.tooltipElement) {
+            this.tooltipElement.element.style.top = (this.activeRowElement.getBoundingClientRect().top) + this.paddingOfTooltip + 'px';
+            this.setVisible();
+        }
     }
 
-    @executeIfExist('tooltipElement')
     removeTooltip() {
-        this.tooltipElement.remove();
+        if (this.tooltipElement) {
+            this.tooltipElement.remove();
+        }
     }
 
 }
